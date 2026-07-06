@@ -53,7 +53,7 @@ async fn run() -> Result<()> {
     }
 }
 
-// ── Commands ─────────────────────────────────────────────────────────────────
+// Commands 
 
 /// Build command: scan a directory and persist metadata into SQLite
 async fn cmd_build(db_path: String, directory: String, clean: bool, threads: usize) -> Result<()> {
@@ -80,7 +80,7 @@ async fn cmd_build(db_path: String, directory: String, clean: bool, threads: usi
         println!();
     }
 
-    // ── Scan ──────────────────────────────────────────────────────────────
+    // Scan
     let config = ScanConfig {
         root: directory.clone(),
         threads,
@@ -106,7 +106,7 @@ async fn cmd_build(db_path: String, directory: String, clean: bool, threads: usi
     }
     println!();
 
-    // ── Insert ────────────────────────────────────────────────────────────
+    // Insert
     if entries.is_empty() {
         println!("  {} No files to index.", "⚑".yellow());
         return Ok(());
@@ -190,7 +190,7 @@ fn cmd_stats(db_path: String, top: usize, json: bool) -> Result<()> {
     println!("  {}", "Index Statistics".bold().underline());
     println!();
 
-    // ── Summary ───────────────────────────────────────────────────────────
+    // Summary
     println!("  {}", "Summary".bold());
     println!(
         "  {:.<30} {}",
@@ -227,7 +227,7 @@ fn cmd_stats(db_path: String, top: usize, json: bool) -> Result<()> {
     );
     println!();
 
-    // ── Top extensions ────────────────────────────────────────────────────
+    //  Top extensions
     if !stats.top_extensions.is_empty() {
         println!("  {}", format!("Top {} Extensions by Count", top).bold());
         println!(
@@ -262,7 +262,7 @@ fn cmd_stats(db_path: String, top: usize, json: bool) -> Result<()> {
         println!();
     }
 
-    // ── Largest files ─────────────────────────────────────────────────────
+    //  Largest files 
     if !stats.largest_files.is_empty() {
         println!("  {}", "Top 5 Largest Files".bold());
         println!(
@@ -289,8 +289,7 @@ fn cmd_stats(db_path: String, top: usize, json: bool) -> Result<()> {
     Ok(())
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
+// Helpers 
 fn open_db_or_bail(db_path: &str) -> Result<Database> {
     let db = Database::open(db_path).context("Failed to open database")?;
     if db.is_empty()? {

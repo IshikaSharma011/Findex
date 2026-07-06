@@ -38,7 +38,7 @@ pub fn search_extension(db: &Database, ext: &str, limit: usize) -> Result<Search
 pub fn print_results(result: &SearchResult) {
     let count = result.entries.len();
 
-    // ── Header ─────────────────────────────────────────────────────────────
+    // Header 
     println!();
     println!(
         "{}",
@@ -62,7 +62,7 @@ pub fn print_results(result: &SearchResult) {
         return;
     }
 
-    // ── Column header ──────────────────────────────────────────────────────
+    //  Column header 
     println!(
         "  {:<5}  {:<32}  {:<8}  {:<12}  {}",
         "#".dimmed(),
@@ -73,7 +73,7 @@ pub fn print_results(result: &SearchResult) {
     );
     println!("  {}", "─".repeat(100).dimmed());
 
-    // ── Rows ───────────────────────────────────────────────────────────────
+    // Rows 
     for (idx, entry) in result.entries.iter().enumerate() {
         let idx_str = format!("{:>4}.", idx + 1);
         let filename = truncate(&entry.filename, 32);
@@ -118,7 +118,6 @@ pub fn print_results_json(result: &SearchResult) -> Result<()> {
     Ok(())
 }
 
-/// Truncate a string to `max_chars`, appending "…" if needed
 fn truncate(s: &str, max_chars: usize) -> String {
     if s.chars().count() <= max_chars {
         s.to_string()
@@ -127,7 +126,6 @@ fn truncate(s: &str, max_chars: usize) -> String {
     }
 }
 
-/// Shorten a path by replacing the home directory with '~'
 fn shrink_path(path: &str, max_len: usize) -> String {
     let home = dirs::home_dir()
         .and_then(|h| h.to_str().map(|s| s.to_string()))

@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 
-/// A production-quality File System Indexer — scan, store, and search file metadata at blazing speed.
+
 #[derive(Parser, Debug)]
 #[command(
     name = "indexer",
