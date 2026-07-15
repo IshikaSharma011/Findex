@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
 
 # 🗂️ Findex
@@ -22,10 +23,65 @@ Scan once. Search instantly. No cloud, no daemon, no dependencies.
 .\target\release\indexer.exe search config                       # find files by name
 .\target\release\indexer.exe ext rs                              # filter by extension
 .\target\release\indexer.exe stats                               # explore your filesystem
+=======
+<<<<<<< HEAD
+# 1. Install Rust (if not installed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# 2. Unzip and build
+unzip fs-indexer.zip
+cd fs-indexer
+cargo build --release       # ~2-3 min first time (compiles SQLite)
+
+# 3. Use it
+./target/release/indexer build ~/Documents --db myindex.db
+./target/release/indexer stats --db myindex.db
+./target/release/indexer search config --db myindex.db
+./target/release/indexer ext rs --db myindex.db
+
+
+
+# 📁 File System Indexer CLI
+
+A production-quality CLI tool written in **Rust** that recursively scans directories, indexes file metadata into **SQLite**, and lets you search and analyze your filesystem at blazing speed.
+
+---
+
+## Tech Stack
+
+| Crate       | Purpose                          |
+|-------------|----------------------------------|
+| `tokio`     | Async runtime                    |
+| `walkdir`   | Recursive directory traversal    |
+| `rusqlite`  | SQLite (bundled, no install needed) |
+| `clap`      | CLI argument parsing             |
+| `serde`     | JSON serialization               |
+| `anyhow`    | Error handling                   |
+| `colored`   | Terminal colors                  |
+| `indicatif` | Progress bars & spinners         |
+| `humansize` | Human-readable file sizes        |
+| `chrono`    | Timestamps                       |
+
+---
+
+## Project Structure
+
+```
+fs-indexer/
+├── Cargo.toml
+└── src/
+    ├── main.rs       ← Entry point, command dispatch, output rendering
+    ├── cli.rs        ← Clap CLI definitions (Commands, flags)
+    ├── models.rs     ← FileEntry, IndexStats, SearchResult structs
+    ├── database.rs   ← SQLite layer (open, insert batch, search, stats)
+    ├── scanner.rs    ← Async recursive directory walk (skips hidden)
+    └── search.rs     ← Search logic + result formatting
+>>>>>>> 6191237 (Add File System Indexer project)
 ```
 
 ---
 
+<<<<<<< HEAD
 ## ✨ Features
 
 - **Instant search** — queries hit a local SQLite index, not your disk
@@ -83,10 +139,30 @@ cargo build --release
 You'll see this when it's done:
 ```
 Finished release [optimized] target(s) in 3m 12s
+=======
+## Build from Source
+
+### Prerequisites
+- Rust 1.70+ → https://rustup.rs
+
+```bash
+# Clone / extract the project
+cd fs-indexer
+
+# Debug build (fast compile, slower binary)
+cargo build
+
+# Release build (optimized — recommended)
+cargo build --release
+
+# Binary location
+./target/release/indexer
+>>>>>>> 6191237 (Add File System Indexer project)
 ```
 
 ---
 
+<<<<<<< HEAD
 ## 🚀 Usage
 
 > **Tip:** Open the VS Code terminal with **Ctrl + `** (backtick key, top-left of keyboard)
@@ -110,12 +186,33 @@ Finished release [optimized] target(s) in 3m 12s
 ```
 
 **Output:**
+=======
+## Commands & Usage
+
+### 1. `build` — Index a directory
+
+```bash
+./target/release/indexer build <DIRECTORY> [OPTIONS]
+
+# Examples
+./target/release/indexer build ~/Documents
+./target/release/indexer build /usr/lib --db myindex.db
+./target/release/indexer build ~/Projects --clean      # wipe before re-scan
+./target/release/indexer build ~/Projects --threads 8  # parallel threads
+```
+
+**Expected output:**
+>>>>>>> 6191237 (Add File System Indexer project)
 ```
   ╔══════════════════════════════════╗
   ║   📁  File System Indexer v1.0  ║
   ╚══════════════════════════════════╝
 
+<<<<<<< HEAD
   Building index from: C:\Users\YourName\Projects
+=======
+  Building index from: ~/Projects
+>>>>>>> 6191237 (Add File System Indexer project)
   Database: index.db
   Threads: 4
 
@@ -123,7 +220,11 @@ Finished release [optimized] target(s) in 3m 12s
 
   ✓ Found 1,842 files in 203 directories (38 ms)
 
+<<<<<<< HEAD
   ⠸ [00:00:02] [████████████████████░░░░░░░░░░░░░░░░░░░░] 1492/1842 (00:00:01)
+=======
+  ⠸ [00:00:02] [████████████████████████░░░░░░░░░░░░░░░░] 1492/1842 (00:00:01)
+>>>>>>> 6191237 (Add File System Indexer project)
 
   ✓ Indexed 1,842 files  (DB size: 512.00 kB)
 
@@ -132,6 +233,7 @@ Finished release [optimized] target(s) in 3m 12s
 
 ---
 
+<<<<<<< HEAD
 ### `search` — Find files by keyword
 
 ```powershell
@@ -160,10 +262,35 @@ Finished release [optimized] target(s) in 3m 12s
      4.  database_config.py                .py            1.10 kB  C:\Users\YourName\db\database_config.py
   ────────────────────────────────────────────────────────────────────────────────────────────────────
   → 4 files matched
+=======
+### 2. `search` — Keyword search in filenames
+
+```bash
+./target/release/indexer search <KEYWORD> [OPTIONS]
+
+# Examples
+./target/release/indexer search main
+./target/release/indexer search config --limit 50
+./target/release/indexer search readme --json      # JSON output
+```
+
+**Expected output:**
+```
+ 🔍  keyword search for 'main' — 3 results (0 ms)
+
+  #      FILENAME                          EXT       SIZE          PATH
+  ────────────────────────────────────────────────────────────────────────────────────────────────────
+     1.  main.rs                           .rs           10.99 kB  ~/fs-indexer/src/main.rs
+     2.  main.py                           .py            2.34 kB  ~/myproject/main.py
+     3.  main.go                           .go            5.10 kB  ~/goproj/main.go
+  ────────────────────────────────────────────────────────────────────────────────────────────────────
+  → 3 files matched
+>>>>>>> 6191237 (Add File System Indexer project)
 ```
 
 ---
 
+<<<<<<< HEAD
 ### `ext` — Filter by file extension
 
 ```powershell
@@ -184,23 +311,48 @@ Finished release [optimized] target(s) in 3m 12s
 ```
 
 **Output:**
+=======
+### 3. `ext` — Filter by file extension
+
+```bash
+./target/release/indexer ext <EXTENSION> [OPTIONS]
+
+# Examples
+./target/release/indexer ext rs
+./target/release/indexer ext py --limit 100
+./target/release/indexer ext json --json
+./target/release/indexer ext txt --db myindex.db
+```
+
+**Expected output:**
+>>>>>>> 6191237 (Add File System Indexer project)
 ```
  🔍  extension search for 'rs' — 6 results (0 ms)
 
   #      FILENAME                          EXT       SIZE          PATH
   ────────────────────────────────────────────────────────────────────────────────────────────────────
+<<<<<<< HEAD
      1.  cli.rs                            .rs            2.89 kB  C:\Users\YourName\findex\src\cli.rs
      2.  database.rs                       .rs           10.60 kB  C:\Users\YourName\findex\src\database.rs
      3.  main.rs                           .rs           10.99 kB  C:\Users\YourName\findex\src\main.rs
      4.  models.rs                         .rs            2.12 kB  C:\Users\YourName\findex\src\models.rs
      5.  scanner.rs                        .rs            6.11 kB  C:\Users\YourName\findex\src\scanner.rs
      6.  search.rs                         .rs            4.70 kB  C:\Users\YourName\findex\src\search.rs
+=======
+     1.  cli.rs                            .rs            2.89 kB  ~/fs-indexer/src/cli.rs
+     2.  database.rs                       .rs           10.60 kB  ~/fs-indexer/src/database.rs
+     3.  main.rs                           .rs           10.99 kB  ~/fs-indexer/src/main.rs
+     4.  models.rs                         .rs            2.12 kB  ~/fs-indexer/src/models.rs
+     5.  scanner.rs                        .rs            6.11 kB  ~/fs-indexer/src/scanner.rs
+     6.  search.rs                         .rs            4.70 kB  ~/fs-indexer/src/search.rs
+>>>>>>> 6191237 (Add File System Indexer project)
   ────────────────────────────────────────────────────────────────────────────────────────────────────
   → 6 files matched
 ```
 
 ---
 
+<<<<<<< HEAD
 ### `stats` — Explore index statistics
 
 ```powershell
@@ -219,6 +371,25 @@ Finished release [optimized] target(s) in 3m 12s
 
 **Output:**
 ```
+=======
+### 4. `stats` — Show index statistics
+
+```bash
+./target/release/indexer stats [OPTIONS]
+
+# Examples
+./target/release/indexer stats
+./target/release/indexer stats --top 15
+./target/release/indexer stats --json
+```
+
+**Expected output:**
+```
+  ╔══════════════════════════════════╗
+  ║   📁  File System Indexer v1.0  ║
+  ╚══════════════════════════════════╝
+
+>>>>>>> 6191237 (Add File System Indexer project)
   Index Statistics
 
   Summary
@@ -230,6 +401,7 @@ Finished release [optimized] target(s) in 3m 12s
   Database size ................ 512.00 kB
 
   Top 10 Extensions by Count
+<<<<<<< HEAD
   #      EXT          FILES      TOTAL SIZE
   ──────────────────────────────────────────────────
      1.  .rs            312       18.40 MB  ████████████████████
@@ -243,10 +415,28 @@ Finished release [optimized] target(s) in 3m 12s
   ──────────────────────────────────────────────────────────────────────────
      1.  archive.bin             102.40 MB  C:\Users\YourName\data\archive.bin
      2.  database_dump.sql        48.20 MB  C:\Users\YourName\backups\dump.sql
+=======
+  #      EXT                FILES      TOTAL SIZE
+  ────────────────────────────────────────────────────
+     1.  .rs                  312        18.40 MB  ████████████████████
+     2.  .toml                 84         1.20 MB  █████
+     3.  .md                   71         3.80 MB  ████
+     4.  .json                 60         9.10 MB  ███
+     5.  .py                   45         2.30 MB  ██
+     ...
+
+  Top 5 Largest Files
+  #      FILENAME                                SIZE  PATH
+  ──────────────────────────────────────────────────────────────────────
+     1.  some_large_file.bin              102.40 MB  ~/data/...
+     2.  database_dump.sql                 48.20 MB  ~/backups/...
+     ...
+>>>>>>> 6191237 (Add File System Indexer project)
 ```
 
 ---
 
+<<<<<<< HEAD
 ## ⚙️ Options reference
 
 ### Global
@@ -299,10 +489,56 @@ findex/
     ├── scanner.rs    — Async recursive directory walk (skips hidden dirs)
     ├── database.rs   — SQLite layer: open, batch upsert, search, stats queries
     └── search.rs     — Search logic and colored table renderer
+=======
+## Global Options
+
+```
+--db <PATH>    Path to the SQLite database file (default: index.db)
+-h, --help     Print help
+-V, --version  Print version
+```
+
+## Per-command Options
+
+| Command  | Flag           | Default | Description                    |
+|----------|----------------|---------|--------------------------------|
+| `build`  | `--clean, -c`  | false   | Wipe index before scanning     |
+| `build`  | `--threads, -j`| 4       | Worker threads                 |
+| `search` | `--limit, -n`  | 20      | Max results                    |
+| `search` | `--json`       | false   | Output as JSON                 |
+| `ext`    | `--limit, -n`  | 20      | Max results                    |
+| `ext`    | `--json`       | false   | Output as JSON                 |
+| `stats`  | `--top`        | 10      | Number of top extensions shown |
+| `stats`  | `--json`       | false   | Output as JSON                 |
+
+---
+
+## Quick Start (copy-paste)
+
+```bash
+# Build the binary
+cargo build --release
+
+# Index your home directory
+./target/release/indexer build ~ --db ~/myindex.db
+
+# Find all Rust source files
+./target/release/indexer ext rs --db ~/myindex.db
+
+# Search for config files
+./target/release/indexer search config --db ~/myindex.db --limit 50
+
+# Show statistics
+./target/release/indexer stats --db ~/myindex.db
+
+# Re-index after changes (clean rebuild)
+./target/release/indexer build ~ --db ~/myindex.db --clean
+>>>>>>> 6191237 (Add File System Indexer project)
 ```
 
 ---
 
+<<<<<<< HEAD
 ## 🔧 Tech stack
 
 | Crate | Purpose |
@@ -343,3 +579,20 @@ The folder in your `--db` path must exist first. If you use `--db C:\data\myinde
 ## 📄 License
 
 MIT — see [LICENSE](LICENSE).
+=======
+## Features
+
+- ✅ Recursive directory scanning via `walkdir`
+- ✅ Hidden directories/files automatically skipped (`.git`, `.cache`, etc.)
+- ✅ Stores: filename, extension, absolute path, size, last modified, indexed timestamp
+- ✅ SQLite with WAL mode + indices for fast queries
+- ✅ Upsert on conflict — re-running `build` updates changed files
+- ✅ Batch inserts (512 files/tx) for maximum throughput
+- ✅ Progress bar during indexing, spinner during scan
+- ✅ JSON output mode for all commands (`--json`)
+- ✅ Human-readable file sizes everywhere
+- ✅ `~` expansion in database path
+=======
+# File-Indexer
+>>>>>>> 74e7c149ad87d690981ffaa6120ab52410e7530a
+>>>>>>> 6191237 (Add File System Indexer project)
